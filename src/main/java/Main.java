@@ -24,10 +24,23 @@ public class Main {
             } else if(command.equals("list")) {
                 System.out.println("==================");
                 for(int i = 0; i < titles.size(); i++) {
+                    System.out.printf("번호 : %d\n", i + 1);
                     System.out.printf("제목 : %s\n", titles.get(i));
-                    System.out.printf("내용 : %s\n", contents.get(i));
                     System.out.println("==================");
                 }
+            } else if(command.equals("update")) {
+                System.out.print("수정할 게시물 번호 : ");
+                int target = scan.nextInt();
+
+                scan.nextLine();
+
+                System.out.print("제목 : ");
+                String newTitle = scan.nextLine();
+                System.out.print("내용 : ");
+                String newContent = scan.nextLine();
+
+                titles.set(target - 1, newTitle);
+                contents.set(target - 1, newContent);
             }
         }
     }
