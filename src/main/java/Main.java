@@ -41,7 +41,7 @@ public class Main {
 
                 scan.nextLine();
 
-                if(0 <= target && target < articles.size()) {
+                if(0 < target && target <= articles.size()) {
                     System.out.print("제목 : ");
                     String newTitle = scan.nextLine();
                     System.out.print("내용 : ");
