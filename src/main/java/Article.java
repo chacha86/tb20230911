@@ -1,11 +1,14 @@
 public class Article {
 
+    // 게시물 번호
+    private int id;
     // 제목
     private String title;
     // 내용
     private String content;
 
-    public Article(String title, String content) {
+    public Article(int id, String title, String content) {
+        this.id = id;
         this.title = title;
         this.content = content;
     }
@@ -24,5 +27,13 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
