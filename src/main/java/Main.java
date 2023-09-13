@@ -44,6 +44,7 @@ public class Main {
 
                     System.out.printf("번호 : %d\n", article.getId());
                     System.out.printf("제목 : %s\n", article.getTitle());
+                    System.out.printf("등록날짜 : %s\n", article.getRegDate());
                     System.out.println("==================");
                 }
             } else if (command.equals("update")) {
@@ -103,6 +104,24 @@ public class Main {
                     System.out.printf("등록일 : %s\n", article.getRegDate());
                     System.out.println("===================");
                 }
+            } else if(command.equals("search")) {
+                System.out.print("검색 키워드를 입력해주세요 : ");
+                String keyword = scan.nextLine();
+
+                System.out.println("==================");
+                for(int i = 0; i < articles.size(); i++) {
+                    Article article = articles.get(i);
+                    String title = article.getTitle();
+
+                    if(title.contains(keyword)) {
+                        System.out.printf("번호 : %d\n", article.getId());
+                        System.out.printf("제목 : %s\n", article.getTitle());
+                        System.out.printf("등록날짜 : %s\n", article.getRegDate());
+                        System.out.println("==================");
+                    }
+                }
+
+
             }
         }
     }
