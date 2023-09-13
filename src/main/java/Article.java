@@ -7,6 +7,9 @@ public class Article {
     // 내용
     private String content;
 
+    // 조회수
+    private int hit;
+
     private String regDate;
 
     public Article(int id, String title, String content, String regDate) {
@@ -47,4 +50,13 @@ public class Article {
     public void setRegDate(String regDate) {
         this.regDate = regDate;
     }
+
+    public int getHit() {
+        return hit;
+    }
+
+    public void setHit(int hit) {
+        this.hit = hit;
+    }
+
 }
