@@ -42,49 +42,38 @@ public class Main {
 
                 scan.nextLine();
 
-                boolean isExist = false;
+                Article article = findById(targetId);
 
-                for (int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-
-                    if (targetId == article.getId()) {
-                        System.out.print("제목 : ");
-                        String newTitle = scan.nextLine();
-                        System.out.print("내용 : ");
-                        String newContent = scan.nextLine();
-
-                        Article newArticle = new Article(targetId, newTitle, newContent);
-                        articles.set(i, newArticle);
-
-                        System.out.println("수정이 완료되었습니다.");
-                        isExist = true;
-                    }
-                }
-
-                if(isExist == false) {
+                if(article == null) {
                     System.out.println("없는 게시물입니다.");
+                } else {
+                    System.out.print("제목 : ");
+                    String newTitle = scan.nextLine();
+                    System.out.print("내용 : ");
+                    String newContent = scan.nextLine();
+
+                    article.setTitle(newTitle);
+                    article.setContent(newContent);
+
+                    System.out.println("수정이 완료되었습니다.");
                 }
+
+
             } else if (command.equals("delete")) {
                 System.out.print("삭제할 게시물 번호 : ");
                 int targetId = scan.nextInt();
 
                 scan.nextLine();
 
-                boolean isExist = false;
+                Article article = findById(targetId);
 
-                for (int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-
-                    if (targetId == article.getId()) {
-                        articles.remove(i);
-                        System.out.printf("%d번 게시물이 삭제되었습니다.\n", targetId);
-                        isExist = true;
-                    }
-                }
-
-                if(isExist == false) {
+                if(article == null) {
                     System.out.println("없는 게시물입니다.");
+                } else {
+                    //articles.remove(i); // 위치 기반으로 삭제
+                    articles.remove(article);// 값 기반 삭제
                 }
+
             } else if (command.equals("detail")) {
                 // 중복 -> 함수
 
