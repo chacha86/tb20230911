@@ -8,8 +8,16 @@ public class Main {
 
     public static void main(String[] args) {
 
+        Article a1 = new Article(1, "안녕하세요 반갑습니다. 자바 공부중이에요.", "냉무", getCurrentDate());
+        Article a2 = new Article(2, "자바 질문좀 할게요~.", "냉무", getCurrentDate());
+        Article a3 = new Article(3, "정처기 따야되나요?", "냉무", getCurrentDate());
+
+        articles.add(a1);
+        articles.add(a2);
+        articles.add(a3);
+
         Scanner scan = new Scanner(System.in);
-        int lastArticleId = 1;
+        int lastArticleId = 4;
 
         while (true) {
             System.out.print("명령어 : ");
@@ -23,14 +31,7 @@ public class Main {
                 System.out.print("게시물 내용을 입력해주세요 : ");
                 String content = scan.nextLine();
 
-                // 현재 날짜 구하기
-                LocalDateTime now = LocalDateTime.now();
-                // 포맷 정의
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
-                // 포맷 적용
-                String formatedNow = now.format(formatter);
-
-                Article article = new Article(lastArticleId, title, content, formatedNow);
+                Article article = new Article(lastArticleId, title, content, getCurrentDate());
                 articles.add(article);
 
                 System.out.println("게시물이 등록되었습니다.");
@@ -53,7 +54,7 @@ public class Main {
 
                 Article article = findById(targetId);
 
-                if(article == null) {
+                if (article == null) {
                     System.out.println("없는 게시물입니다.");
                 } else {
                     System.out.print("제목 : ");
@@ -76,7 +77,7 @@ public class Main {
 
                 Article article = findById(targetId);
 
-                if(article == null) {
+                if (article == null) {
                     System.out.println("없는 게시물입니다.");
                 } else {
                     //articles.remove(i); // 위치 기반으로 삭제
@@ -90,7 +91,9 @@ public class Main {
                 int targetId = scan.nextInt();
                 Article article = findById(targetId);
 
-                if(article == null) {
+                scan.nextLine();
+
+                if (article == null) {
                     System.out.println("존재하지 않는 게시물입니다.");
                 } else {
                     System.out.println("===================");
@@ -108,15 +111,24 @@ public class Main {
 
         Article target = null;
 
-        for(int i = 0; i < articles.size(); i++) {
+        for (int i = 0; i < articles.size(); i++) {
             Article article = articles.get(i);
-            if(id == article.getId()) {
+            if (id == article.getId()) {
                 target = article;
             }
         }
 
         return target;
 
+    }
+
+
+    public static String getCurrentDate() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        String formatedNow = now.format(formatter);
+
+        return formatedNow;
     }
 }
 
