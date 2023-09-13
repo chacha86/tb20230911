@@ -7,10 +7,13 @@ public class Article {
     // 내용
     private String content;
 
-    public Article(int id, String title, String content) {
+    private String regDate;
+
+    public Article(int id, String title, String content, String regDate) {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.regDate = regDate;
     }
 
     public String getTitle() {
@@ -35,5 +38,13 @@ public class Article {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(String regDate) {
+        this.regDate = regDate;
     }
 }
