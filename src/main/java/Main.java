@@ -37,16 +37,8 @@ public class Main {
                 System.out.println("게시물이 등록되었습니다.");
                 lastArticleId++;
             } else if (command.equals("list")) {
-                System.out.println("==================");
-                for (int i = 0; i < articles.size(); i++) {
+                printArticles(articles);
 
-                    Article article = articles.get(i);
-
-                    System.out.printf("번호 : %d\n", article.getId());
-                    System.out.printf("제목 : %s\n", article.getTitle());
-                    System.out.printf("등록날짜 : %s\n", article.getRegDate());
-                    System.out.println("==================");
-                }
             } else if (command.equals("update")) {
                 System.out.print("수정할 게시물 번호 : ");
                 int targetId = scan.nextInt();
@@ -108,20 +100,19 @@ public class Main {
                 System.out.print("검색 키워드를 입력해주세요 : ");
                 String keyword = scan.nextLine();
 
+                ArrayList<Article> searchedArticles = new ArrayList<>();
+
                 System.out.println("==================");
                 for(int i = 0; i < articles.size(); i++) {
                     Article article = articles.get(i);
                     String title = article.getTitle();
 
                     if(title.contains(keyword)) {
-                        System.out.printf("번호 : %d\n", article.getId());
-                        System.out.printf("제목 : %s\n", article.getTitle());
-                        System.out.printf("등록날짜 : %s\n", article.getRegDate());
-                        System.out.println("==================");
+                        searchedArticles.add(article);
                     }
                 }
 
-
+                printArticles(searchedArticles);
             }
         }
     }
@@ -148,6 +139,21 @@ public class Main {
         String formatedNow = now.format(formatter);
 
         return formatedNow;
+    }
+
+
+    public static void printArticles(ArrayList<Article> list) {
+        System.out.println("==================");
+        for (int i = 0; i < list.size(); i++) {
+
+            Article article = list.get(i);
+
+            System.out.printf("번호 : %d\n", article.getId());
+            System.out.printf("제목 : %s\n", article.getTitle());
+            System.out.printf("등록날짜 : %s\n", article.getRegDate());
+
+            System.out.println("==================");
+        }
     }
 }
 
