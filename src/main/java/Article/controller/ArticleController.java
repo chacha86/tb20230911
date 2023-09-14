@@ -30,9 +30,10 @@ public class ArticleController {
     }
 
     public void update() {
+
         System.out.print("수정할 게시물 번호 : ");
-        int targetId = scan.nextInt();
-        scan.nextLine();
+        int targetId = getParamInt(scan.nextLine(), -1);
+
         Article article = articleRepository.findById(targetId);
 
         if (article == null) {
@@ -52,9 +53,7 @@ public class ArticleController {
 
     public void delete() {
         System.out.print("삭제할 게시물 번호 : ");
-        int targetId = scan.nextInt();
-
-        scan.nextLine();
+        int targetId = getParamInt(scan.nextLine(), -1);
 
         Article article = articleRepository.findById(targetId);
 
@@ -69,10 +68,8 @@ public class ArticleController {
         // 중복 -> 함수
 
         System.out.print("상세보기 할 게시물 번호를 입력해주세요 : ");
-        int targetId = scan.nextInt();
+        int targetId = getParamInt(scan.nextLine(), -1);
         Article article = articleRepository.findById(targetId);
-
-        scan.nextLine();
 
         if (article == null) {
             System.out.println("존재하지 않는 게시물입니다.");
@@ -87,5 +84,18 @@ public class ArticleController {
         String keyword = scan.nextLine();
         ArrayList<Article> searchedArticles = articleRepository.findByTitle(keyword);
         articleView.printArticles(searchedArticles);
+    }
+
+    public int getParamInt(String input, int defaulValue) {
+
+        try {
+                int num = Integer.parseInt(input);
+                return num;
+
+            }catch (NumberFormatException e) {
+                System.out.println("숫자만 입력 가능합니다.");
+        }
+
+        return defaulValue;
     }
 }
