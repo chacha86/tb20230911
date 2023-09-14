@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class ArticleRepository {
 
     ArrayList<Article> articles = new ArrayList<>();
+    int lastArticleId = 4;
 
     public ArticleRepository() {
         Article a1 = new Article(1, "안녕하세요 반갑습니다. 자바 공부중이에요.", "냉무", Util.getCurrentDate());
@@ -21,8 +22,10 @@ public class ArticleRepository {
         articles.add(a3);
     }
 
-    public void insert(Article article) {
+    public void insert(String title, String content) {
+        Article article = new Article(lastArticleId, title, content, Util.getCurrentDate());
         articles.add(article);
+        lastArticleId++;
     }
 
     public void delete(Article article) {
