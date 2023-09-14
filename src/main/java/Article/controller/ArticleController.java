@@ -33,7 +33,9 @@ public class ArticleController {
 
         System.out.print("수정할 게시물 번호 : ");
         int targetId = getParamInt(scan.nextLine(), -1);
-
+        if(targetId == -1) {
+            return;
+        }
         Article article = articleRepository.findById(targetId);
 
         if (article == null) {
@@ -55,6 +57,10 @@ public class ArticleController {
         System.out.print("삭제할 게시물 번호 : ");
         int targetId = getParamInt(scan.nextLine(), -1);
 
+        if(targetId == -1) {
+            return;
+        }
+
         Article article = articleRepository.findById(targetId);
 
         if (article == null) {
@@ -69,6 +75,9 @@ public class ArticleController {
 
         System.out.print("상세보기 할 게시물 번호를 입력해주세요 : ");
         int targetId = getParamInt(scan.nextLine(), -1);
+        if(targetId == -1) {
+            return;
+        }
         Article article = articleRepository.findById(targetId);
 
         if (article == null) {
