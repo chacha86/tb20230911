@@ -1,3 +1,7 @@
+package Article.view;
+
+import Article.model.Article;
+
 import java.util.ArrayList;
 
 public class ArticleView {

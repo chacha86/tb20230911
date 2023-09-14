@@ -1,21 +1,20 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+package Article.controller;
+
+import Article.model.Article;
+import Article.model.ArticleRepository;
+import Article.view.ArticleView;
+import util.Util;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BoardApp {
 
-    ArrayList<Article> articles = new ArrayList<>();
+
     ArticleView articleView = new ArticleView();
+    ArticleRepository articleRepository = new ArticleRepository();
 
     public void start() {
-        Article a1 = new Article(1, "안녕하세요 반갑습니다. 자바 공부중이에요.", "냉무", getCurrentDate());
-        Article a2 = new Article(2, "자바 질문좀 할게요~.", "냉무", getCurrentDate());
-        Article a3 = new Article(3, "정처기 따야되나요?", "냉무", getCurrentDate());
-
-        articles.add(a1);
-        articles.add(a2);
-        articles.add(a3);
 
         Scanner scan = new Scanner(System.in);
         int lastArticleId = 4;
@@ -32,12 +31,14 @@ public class BoardApp {
                 System.out.print("게시물 내용을 입력해주세요 : ");
                 String content = scan.nextLine();
 
-                Article article = new Article(lastArticleId, title, content, getCurrentDate());
-                articles.add(article);
+                Article article = new Article(lastArticleId, title, content, Util.getCurrentDate());
+                articleRepository.insert(article);
 
                 System.out.println("게시물이 등록되었습니다.");
                 lastArticleId++;
             } else if (command.equals("list")) {
+
+                ArrayList<Article> articles = articleRepository.findAllArticles();
                 articleView.printArticles(articles);
 
             } else if (command.equals("update")) {
@@ -46,7 +47,7 @@ public class BoardApp {
 
                 scan.nextLine();
 
-                Article article = findById(targetId);
+                Article article = articleRepository.findById(targetId);
 
                 if (article == null) {
                     System.out.println("없는 게시물입니다.");
@@ -69,13 +70,12 @@ public class BoardApp {
 
                 scan.nextLine();
 
-                Article article = findById(targetId);
+                Article article = articleRepository.findById(targetId);
 
                 if (article == null) {
                     System.out.println("없는 게시물입니다.");
                 } else {
-                    //articles.remove(i); // 위치 기반으로 삭제
-                    articles.remove(article);// 값 기반 삭제
+
                 }
 
             } else if (command.equals("detail")) {
@@ -83,7 +83,7 @@ public class BoardApp {
 
                 System.out.print("상세보기 할 게시물 번호를 입력해주세요 : ");
                 int targetId = scan.nextInt();
-                Article article = findById(targetId);
+                Article article = articleRepository.findById(targetId);
 
                 scan.nextLine();
 
@@ -97,46 +97,9 @@ public class BoardApp {
             } else if(command.equals("search")) {
                 System.out.print("검색 키워드를 입력해주세요 : ");
                 String keyword = scan.nextLine();
-
-                ArrayList<Article> searchedArticles = new ArrayList<>();
-
-                System.out.println("==================");
-                for(int i = 0; i < articles.size(); i++) {
-                    Article article = articles.get(i);
-                    String title = article.getTitle();
-
-                    if(title.contains(keyword)) {
-                        searchedArticles.add(article);
-                    }
-                }
-
+                ArrayList<Article> searchedArticles = articleRepository.findByTitle(keyword);
                 articleView.printArticles(searchedArticles);
             }
         }
     }
-
-    public Article findById(int id) {
-
-        Article target = null;
-
-        for (int i = 0; i < articles.size(); i++) {
-            Article article = articles.get(i);
-            if (id == article.getId()) {
-                target = article;
-            }
-        }
-
-        return target;
-
-    }
-
-
-    public String getCurrentDate() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
-        String formatedNow = now.format(formatter);
-
-        return formatedNow;
-    }
-
 }

@@ -1,3 +1,5 @@
+package Article.model;
+
 public class Article {
 
     // 게시물 번호
