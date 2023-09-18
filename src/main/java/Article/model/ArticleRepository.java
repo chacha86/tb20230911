@@ -1,6 +1,5 @@
 package Article.model;
 
-import Article.model.Article;
 import util.Util;
 
 import java.util.ArrayList;
@@ -9,8 +8,8 @@ import java.util.ArrayList;
 // Repository
 public class ArticleRepository {
 
-    ArrayList<Article> articles = new ArrayList<>();
-    int lastArticleId = 4;
+    private ArrayList<Article> articles = new ArrayList<>();
+    private int lastArticleId = 4;
 
     public ArticleRepository() {
         Article a1 = new Article(1, "안녕하세요 반갑습니다. 자바 공부중이에요.", "냉무", Util.getCurrentDate());

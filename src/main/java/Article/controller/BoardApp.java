@@ -1,23 +1,23 @@
 package Article.controller;
 
-import Article.model.Article;
-import Article.model.ArticleRepository;
-import Article.view.ArticleView;
-import util.Util;
+import Article.model.Member;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class BoardApp {
 
-
-
     ArticleController articleController = new ArticleController();
+    MemberController memberController = new MemberController();
     Scanner scan = new Scanner(System.in);
 
     public void start() {
         while (true) {
-            System.out.print("명령어 : ");
+            Member loginedMember = memberController.getLoginedMember();
+            if (loginedMember == null) {
+                System.out.print("명령어: ");
+            } else {
+                System.out.printf("명령어[%s(%s)]: ", loginedMember.getLoginId(), loginedMember.getNickname());
+            }
             String command = scan.nextLine();
             if (command.equals("exit")) {
                 System.out.println("프로그램을 종료합니다.");
@@ -32,8 +32,12 @@ public class BoardApp {
                 articleController.delete();
             } else if (command.equals("detail")) {
                 articleController.detail();
-            } else if(command.equals("search")) {
+            } else if (command.equals("search")) {
                 articleController.search();
+            } else if (command.equals("signup")) {
+                memberController.signup();
+            } else if (command.equals("login")) {
+                memberController.login();
             }
         }
     }
