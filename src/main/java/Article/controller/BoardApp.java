@@ -23,7 +23,7 @@ public class BoardApp {
                 System.out.println("프로그램을 종료합니다.");
                 break;
             } else if (command.equals("add")) {
-                articleController.add();
+                articleController.add(loginedMember);
             } else if (command.equals("list")) {
                 articleController.list();
             } else if (command.equals("update")) {

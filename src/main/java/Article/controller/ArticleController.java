@@ -1,9 +1,6 @@
 package Article.controller;
 
-import Article.model.Article;
-import Article.model.ArticleRepository;
-import Article.model.Reply;
-import Article.model.ReplyRepository;
+import Article.model.*;
 import Article.view.ArticleView;
 import util.Util;
 
@@ -15,15 +12,22 @@ public class ArticleController {
     ArticleView articleView = new ArticleView();
     ArticleRepository articleRepository = new ArticleRepository();
     ReplyRepository replyRepository = new ReplyRepository();
+    MemberRepository memberRepository = new MemberRepository();
     Scanner scan = new Scanner(System.in);
 
-    public void add() {
+    public void add(Member member) {
+
+        if(member == null) {
+            System.out.println("로그인을 해야 글쓰기가 가능합니다.");
+            return;
+        }
+
         System.out.print("게시물 제목을 입력해주세요 : ");
         String title = scan.nextLine();
         System.out.print("게시물 내용을 입력해주세요 : ");
         String content = scan.nextLine();
 
-        articleRepository.insert(title, content);
+        articleRepository.insert(title, content, member.getId());
 
         System.out.println("게시물이 등록되었습니다.");
     }
@@ -89,25 +93,26 @@ public class ArticleController {
         } else {
             article.setHit(article.getHit() + 1);
             ArrayList<Reply> replies = replyRepository.getRepliesByArticleId(article.getId());
-            articleView.printArticleDetail(article, replies);
-            doDetailProcess(article, replies);
+            Member member = memberRepository.getMemberById(article.getMemberId());
+            articleView.printArticleDetail(article, member, replies);
+            doDetailProcess(article, member, replies);
         }
     }
 
-    public void doDetailProcess(Article article, ArrayList<Reply> replies) {
+    public void doDetailProcess(Article article, Member member, ArrayList<Reply> replies) {
         while(true) {
             System.out.print("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : ");
             int cmd = getParamInt(scan.nextLine(), -1);
 
             switch(cmd) {
                 case 1 :
-                    addReply(article);
+                    addReply(article, member);
                     break;
                 case 2 :
                     System.out.println("추천");
                     break;
                 case 3 :
-                    updateMyArticle(article, replies);
+                    updateMyArticle(article, member, replies);
                     break;
                 case 4 :
                     deleteMyArticle(article);
@@ -133,17 +138,17 @@ public class ArticleController {
         }
     }
 
-    private void updateMyArticle(Article article, ArrayList<Reply> replies) {
+    private void updateMyArticle(Article article, Member member, ArrayList<Reply> replies) {
         System.out.print("새로운 제목 : ");
         String title = scan.nextLine();
         System.out.print("새로운 내용 : ");
         String body = scan.nextLine();
 
         articleRepository.update(article.getId(), title, body);
-        articleView.printArticleDetail(article, replies);
+        articleView.printArticleDetail(article, member, replies);
     }
 
-    public void addReply(Article article) {
+    public void addReply(Article article, Member member) {
         System.out.print("댓글 내용 : ");
         String body = scan.nextLine();
         String regDate = Util.getCurrentDate();
@@ -153,7 +158,7 @@ public class ArticleController {
 
         System.out.println("댓글이 성공적으로 등록되었습니다.");
         ArrayList<Reply> replies = replyRepository.getRepliesByArticleId(article.getId());
-        articleView.printArticleDetail(article, replies);
+        articleView.printArticleDetail(article, member, replies);
     }
 
     public void search() {
