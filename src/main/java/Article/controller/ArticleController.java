@@ -13,6 +13,7 @@ public class ArticleController {
     private ArticleRepository articleRepository = new ArticleRepository();
     private ReplyRepository replyRepository = new ReplyRepository();
     private MemberRepository memberRepository = new MemberRepository();
+    private LikeRepository likeRepository = new LikeRepository();
     private Scanner scan = new Scanner(System.in);
     private Member loginedMember = null;
 
@@ -78,6 +79,7 @@ public class ArticleController {
 
     public void detail() {
         // 중복 -> 함수
+        if(isNotLogin()) return;
 
         System.out.print("상세보기 할 게시물 번호를 입력해주세요 : ");
         int targetId = getParamInt(scan.nextLine(), -1);
@@ -92,7 +94,10 @@ public class ArticleController {
             article.setHit(article.getHit() + 1);
             ArrayList<Reply> replies = replyRepository.getRepliesByArticleId(article.getId());
             Member member = memberRepository.getMemberById(article.getMemberId());
-            articleView.printArticleDetail(article, member, replies);
+            Like like = likeRepository.getLikeByArticleIdAndMemberId(article.getId(), loginedMember.getId());
+            int likeCount = likeRepository.getCountOfLikeByArticleId(article.getId());
+
+            articleView.printArticleDetail(article, member, replies, likeCount, like);
             doDetailProcess(article, member, replies);
         }
     }
@@ -107,7 +112,7 @@ public class ArticleController {
                     addReply(article, member);
                     break;
                 case 2 :
-                    System.out.println("추천");
+                    checkLike(article, member, replies);
                     break;
                 case 3 :
                     updateMyArticle(article, member, replies);
@@ -124,6 +129,27 @@ public class ArticleController {
                 break;
             }
         }
+    }
+
+    private void checkLike(Article article, Member member, ArrayList<Reply> replies) {
+        // 하나의 게시물에 한명의 유저가 체크 가능 -> 어떤 게시물에 어떤 회원이 좋아요 체크 했는지 기억해야 한다.
+        // 좋아요 -> 어떤 게시물, 어떤 회원, 언제
+        // 좋아요 여러개 -> 1번 게시물에 1번 유저, 1번 게시물에 2번 유저, 1번 게시물에 3번 유저, 2번 게시물에 1번 유저 ....
+        if(isNotLogin()) return;
+
+        Like like = likeRepository.getLikeByArticleIdAndMemberId(article.getId(), loginedMember.getId());
+
+        if(like == null) {
+            likeRepository.insert(article.getId(), loginedMember.getId());
+            System.out.println("해당 게시물을 좋아합니다.");
+        } else {
+            likeRepository.delete(like);
+            System.out.println("해당 게시물의 좋아요를 해제합니다.");
+        }
+
+        int likeCount = likeRepository.getCountOfLikeByArticleId(article.getId());
+        like = likeRepository.getLikeByArticleIdAndMemberId(article.getId(), loginedMember.getId());
+        articleView.printArticleDetail(article, member, replies, likeCount, like);
     }
 
     private void deleteMyArticle(Article article) {
@@ -147,7 +173,9 @@ public class ArticleController {
         String body = scan.nextLine();
 
         articleRepository.update(article.getId(), title, body);
-        articleView.printArticleDetail(article, member, replies);
+        Like like = likeRepository.getLikeByArticleIdAndMemberId(article.getId(), loginedMember.getId());
+        int likeCount = likeRepository.getCountOfLikeByArticleId(article.getId());
+        articleView.printArticleDetail(article, member, replies, likeCount, like);
     }
 
     public void addReply(Article article, Member member) {
@@ -163,7 +191,9 @@ public class ArticleController {
 
         System.out.println("댓글이 성공적으로 등록되었습니다.");
         ArrayList<Reply> replies = replyRepository.getRepliesByArticleId(article.getId());
-        articleView.printArticleDetail(article, member, replies);
+        Like like = likeRepository.getLikeByArticleIdAndMemberId(article.getId(), loginedMember.getId());
+        int likeCount = likeRepository.getCountOfLikeByArticleId(article.getId());
+        articleView.printArticleDetail(article, member, replies, likeCount, like);
     }
 
     public void search() {
