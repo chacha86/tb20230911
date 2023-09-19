@@ -110,7 +110,7 @@ public class ArticleController {
                     updateMyArticle(article, replies);
                     break;
                 case 4 :
-                    System.out.println("삭제");
+                    deleteMyArticle(article);
                     break;
                 case 5 :
                     System.out.println("목록으로 돌아갑니다.");
@@ -123,10 +123,20 @@ public class ArticleController {
         }
     }
 
+    private void deleteMyArticle(Article article) {
+        System.out.print("정말 게시물을 삭제하시겠습니까? (y/n) : ");
+        String isAgree = scan.nextLine();
+        if(isAgree.equals("y")) {
+            articleRepository.delete(article);
+            System.out.printf("홍길동님의 %d번 게시물을 삭제했습니다.\n", article.getId());
+            list();
+        }
+    }
+
     private void updateMyArticle(Article article, ArrayList<Reply> replies) {
-        System.out.println("새로운 제목 : ");
+        System.out.print("새로운 제목 : ");
         String title = scan.nextLine();
-        System.out.println("새로운 내용 : ");
+        System.out.print("새로운 내용 : ");
         String body = scan.nextLine();
 
         articleRepository.update(article.getId(), title, body);
