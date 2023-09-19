@@ -64,4 +64,10 @@ public class ArticleRepository {
 
         return searchedArticles;
     }
+
+    public void update(int articleId, String title, String content) {
+        Article article = findById(articleId);
+        article.setTitle(title);
+        article.setContent(content);
+    }
 }

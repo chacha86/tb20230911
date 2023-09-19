@@ -90,11 +90,11 @@ public class ArticleController {
             article.setHit(article.getHit() + 1);
             ArrayList<Reply> replies = replyRepository.getRepliesByArticleId(article.getId());
             articleView.printArticleDetail(article, replies);
-            doDetailProcess(article);
+            doDetailProcess(article, replies);
         }
     }
 
-    public void doDetailProcess(Article article) {
+    public void doDetailProcess(Article article, ArrayList<Reply> replies) {
         while(true) {
             System.out.print("상세보기 기능을 선택해주세요(1. 댓글 등록, 2. 추천, 3. 수정, 4. 삭제, 5. 목록으로) : ");
             int cmd = getParamInt(scan.nextLine(), -1);
@@ -107,7 +107,7 @@ public class ArticleController {
                     System.out.println("추천");
                     break;
                 case 3 :
-                    System.out.println("수정");
+                    updateMyArticle(article, replies);
                     break;
                 case 4 :
                     System.out.println("삭제");
@@ -121,6 +121,16 @@ public class ArticleController {
                 break;
             }
         }
+    }
+
+    private void updateMyArticle(Article article, ArrayList<Reply> replies) {
+        System.out.println("새로운 제목 : ");
+        String title = scan.nextLine();
+        System.out.println("새로운 내용 : ");
+        String body = scan.nextLine();
+
+        articleRepository.update(article.getId(), title, body);
+        articleView.printArticleDetail(article, replies);
     }
 
     public void addReply(Article article) {
