@@ -9,25 +9,23 @@ import java.util.Scanner;
 
 public class ArticleController {
 
-    ArticleView articleView = new ArticleView();
-    ArticleRepository articleRepository = new ArticleRepository();
-    ReplyRepository replyRepository = new ReplyRepository();
-    MemberRepository memberRepository = new MemberRepository();
-    Scanner scan = new Scanner(System.in);
+    private ArticleView articleView = new ArticleView();
+    private ArticleRepository articleRepository = new ArticleRepository();
+    private ReplyRepository replyRepository = new ReplyRepository();
+    private MemberRepository memberRepository = new MemberRepository();
+    private Scanner scan = new Scanner(System.in);
+    private Member loginedMember = null;
 
-    public void add(Member member) {
+    public void add() {
 
-        if(member == null) {
-            System.out.println("로그인을 해야 글쓰기가 가능합니다.");
-            return;
-        }
+        if(isNotLogin()) return;
 
         System.out.print("게시물 제목을 입력해주세요 : ");
         String title = scan.nextLine();
         System.out.print("게시물 내용을 입력해주세요 : ");
         String content = scan.nextLine();
 
-        articleRepository.insert(title, content, member.getId());
+        articleRepository.insert(title, content, loginedMember.getId());
 
         System.out.println("게시물이 등록되었습니다.");
     }
@@ -129,6 +127,8 @@ public class ArticleController {
     }
 
     private void deleteMyArticle(Article article) {
+        if(isNotLogin()) return;
+
         System.out.print("정말 게시물을 삭제하시겠습니까? (y/n) : ");
         String isAgree = scan.nextLine();
         if(isAgree.equals("y")) {
@@ -139,6 +139,8 @@ public class ArticleController {
     }
 
     private void updateMyArticle(Article article, Member member, ArrayList<Reply> replies) {
+        if(isNotLogin()) return;
+
         System.out.print("새로운 제목 : ");
         String title = scan.nextLine();
         System.out.print("새로운 내용 : ");
@@ -149,6 +151,9 @@ public class ArticleController {
     }
 
     public void addReply(Article article, Member member) {
+
+        if(isNotLogin()) return;
+
         System.out.print("댓글 내용 : ");
         String body = scan.nextLine();
         String regDate = Util.getCurrentDate();
@@ -168,7 +173,14 @@ public class ArticleController {
         articleView.printArticles(searchedArticles);
     }
 
+    public boolean isNotLogin() {
+        if(loginedMember == null) {
+            System.out.println("로그인을 해주세요.");
+            return true;
+        }
 
+        return false;
+    }
 
     public int getParamInt(String input, int defaulValue) {
 
@@ -181,5 +193,13 @@ public class ArticleController {
         }
 
         return defaulValue;
+    }
+
+    public Member getLoginedMember() {
+        return loginedMember;
+    }
+
+    public void setLoginedMember(Member loginedMember) {
+        this.loginedMember = loginedMember;
     }
 }

@@ -13,6 +13,7 @@ public class BoardApp {
     public void start() {
         while (true) {
             Member loginedMember = memberController.getLoginedMember();
+            articleController.setLoginedMember(loginedMember);
             if (loginedMember == null) {
                 System.out.print("명령어: ");
             } else {
@@ -23,7 +24,7 @@ public class BoardApp {
                 System.out.println("프로그램을 종료합니다.");
                 break;
             } else if (command.equals("add")) {
-                articleController.add(loginedMember);
+                articleController.add();
             } else if (command.equals("list")) {
                 articleController.list();
             } else if (command.equals("update")) {
