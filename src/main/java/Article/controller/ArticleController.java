@@ -4,8 +4,7 @@ import Article.model.*;
 import Article.view.ArticleView;
 import util.Util;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class ArticleController {
 
@@ -232,4 +231,59 @@ public class ArticleController {
     public void setLoginedMember(Member loginedMember) {
         this.loginedMember = loginedMember;
     }
+
+    public void sort() {
+        System.out.print("정렬 대상을 선택해주세요. (1. 번호,  2. 조회수) : ");
+        int sortTarget = getParamInt(scan.nextLine(), -1);
+        System.out.print("정렬 방법을 선택해주세요. (1. 오름차순,  2. 내림차순) : ");
+        int sortType = getParamInt(scan.nextLine(), -1);
+        ArrayList<Article> allArticles = articleRepository.findAllArticles();
+
+        if( sortTarget == 1 ) {
+            Collections.sort(allArticles, new SortById().setDirection(sortType));
+        } else {
+            Collections.sort(allArticles, new SortByHit().setDirection(sortType));
+        }
+
+        articleView.printArticles(allArticles);
+    }
 }
+
+class SortById implements Comparator<Article> {
+    private int order = 1;
+
+    SortById setDirection(int direction) {
+        if(direction == 2) {
+            order = -1;
+        }
+
+        return this;
+    }
+
+    @Override
+    public int compare(Article o1, Article o2) {
+        if(o1.getId() > o2.getId()) {
+            return order;
+        }
+        return -1 * order;
+    }
+}
+
+class SortByHit implements Comparator<Article> {
+    private int order = 1;
+
+    SortByHit setDirection(int direction) {
+        if(direction == 2) {
+            order = -1;
+        }
+        return this;
+    }
+    @Override
+    public int compare(Article o1, Article o2) {
+        if(o1.getHit() > o2.getHit()) {
+            return order;
+        }
+        return -1 * order;
+    }
+}
+

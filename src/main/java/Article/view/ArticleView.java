@@ -45,6 +45,7 @@ public class ArticleView {
             System.out.printf("번호 : %d\n", article.getId());
             System.out.printf("제목 : %s\n", article.getTitle());
             System.out.printf("등록날짜 : %s\n", article.getRegDate());
+            System.out.printf("조회수 : %d\n", article.getHit());
 
             System.out.println("==================");
         }
