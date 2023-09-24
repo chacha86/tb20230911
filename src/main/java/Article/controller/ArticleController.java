@@ -239,26 +239,38 @@ public class ArticleController {
         int sortType = getParamInt(scan.nextLine(), -1);
         ArrayList<Article> allArticles = articleRepository.findAllArticles();
 
-        if( sortTarget == 1 ) {
-            Collections.sort(allArticles, new SortById().setDirection(sortType));
-        } else {
-            Collections.sort(allArticles, new SortByHit().setDirection(sortType));
-        }
+        Collections.sort(allArticles, new SortFactory().getSort(sortTarget).setDirection(sortType));
 
         articleView.printArticles(allArticles);
     }
 }
 
-class SortById implements Comparator<Article> {
-    private int order = 1;
+class Sort {
+    protected int order = 1;
 
-    SortById setDirection(int direction) {
+    Comparator<Article> setDirection(int direction) {
         if(direction == 2) {
             order = -1;
         }
 
-        return this;
+        return (Comparator<Article>)this;
     }
+}
+
+class SortFactory {
+
+    Map<Integer, Sort> sortMap = new HashMap<>();
+
+    SortFactory() {
+        sortMap.put(1, new SortById());
+        sortMap.put(2, new SortByHit());
+    }
+    public Sort getSort(int sortTarget) {
+        return sortMap.get(sortTarget);
+    }
+}
+
+class SortById extends Sort implements Comparator<Article> {
 
     @Override
     public int compare(Article o1, Article o2) {
@@ -269,15 +281,7 @@ class SortById implements Comparator<Article> {
     }
 }
 
-class SortByHit implements Comparator<Article> {
-    private int order = 1;
-
-    SortByHit setDirection(int direction) {
-        if(direction == 2) {
-            order = -1;
-        }
-        return this;
-    }
+class SortByHit extends Sort implements Comparator<Article> {
     @Override
     public int compare(Article o1, Article o2) {
         if(o1.getHit() > o2.getHit()) {
