@@ -56,5 +56,6 @@ public class ArticleView {
                 System.out.print(i + " ");
             }
         }
+        System.out.println();
     }
 }

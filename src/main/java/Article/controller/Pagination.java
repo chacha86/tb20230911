@@ -9,7 +9,11 @@ public class Pagination {
     private int totalCount = 0;
     private ArticleRepository articleRepository;
     public int getEndPageNo() {
-        return getStartPageNo() + pageCntPerBlock - 1 ;
+        int endPageNo = getStartPageNo() + pageCntPerBlock - 1 ;
+        if(endPageNo >= getLastPageNo()) {
+            endPageNo = getLastPageNo();
+        }
+        return endPageNo;
     }
     public int getStartPageNo() {
         return (getPageBlockNo() - 1) * pageCntPerBlock + 1;
@@ -17,8 +21,8 @@ public class Pagination {
     public int getPageBlockNo() {
         return (int)(Math.ceil((double)currentPageNo / pageCntPerBlock));
     }
-    public double getPageCount() {
-        return Math.ceil((double)totalCount / itemsCountPerPage);
+    public int getLastPageNo() {
+        return (int)(Math.ceil((double)getTotalCount() / itemsCountPerPage));
     }
     public int getStartIdx() {
         int startIdx = (currentPageNo - 1) * itemsCountPerPage;
@@ -33,8 +37,8 @@ public class Pagination {
     public int getEndIdx() {
         int endIdx = getStartIdx() + itemsCountPerPage;
 
-        if(endIdx >= totalCount) {
-            endIdx = totalCount;
+        if(endIdx >= getTotalCount()) {
+            endIdx = getTotalCount();
         }
 
         return endIdx;
@@ -43,10 +47,13 @@ public class Pagination {
 
     public Pagination() {
         articleRepository = new ArticleRepository();
-        this.totalCount = articleRepository.getTotalArticleCount();
     }
 
     public int getCurrentPageNo() {
         return currentPageNo;
+    }
+
+    public int getTotalCount() {
+        return articleRepository.getTotalArticleCount();
     }
 }
