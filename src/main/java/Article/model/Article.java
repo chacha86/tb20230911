@@ -16,11 +16,13 @@ public class Article {
 
     private String regDate;
 
-    public Article(int id, String title, String content, int memberId, String regDate) {
+    public Article() {}
+    public Article(int id, String title, String content, int memberId, int hit, String regDate) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.memberId = memberId;
+        this.hit = hit;
         this.regDate = regDate;
     }
 

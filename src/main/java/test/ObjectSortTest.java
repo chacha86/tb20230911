@@ -49,6 +49,7 @@ class Person {
     private double height;
     private String name;
 
+    public Person() {}
     public Person(int age, double height, String name) {
         this.age = age;
         this.height = height;

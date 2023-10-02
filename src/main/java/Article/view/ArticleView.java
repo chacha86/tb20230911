@@ -1,11 +1,13 @@
 package Article.view;
 
+import Article.controller.Pagination;
 import Article.model.Article;
 import Article.model.Like;
 import Article.model.Member;
 import Article.model.Reply;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArticleView {
     public void printArticleDetail(Article article, Member member, ArrayList<Reply> replies, int likeCount, Like like) {
@@ -36,7 +38,7 @@ public class ArticleView {
 
     }
 
-    public void printArticles(ArrayList<Article> list) {
+    public void printArticles(List<Article> list, Pagination pagination) {
         System.out.println("==================");
         for (int i = 0; i < list.size(); i++) {
 
@@ -49,5 +51,17 @@ public class ArticleView {
 
             System.out.println("==================");
         }
+
+        System.out.println(pagination.getStartPageOfBlock() + " ~ " + pagination.getEndPageOfBlock() + " 페이지 입니다.");
+        System.out.println(pagination.getTotalPageCnt());
+        System.out.println(pagination.getTotalCnt());
+        for(int i = pagination.getStartPageOfBlock(); i <= pagination.getEndPageOfBlock(); i++) {
+            if (i == pagination.getCurrentPageNo()) {
+                System.out.print("[" + i +"]" + " ");
+            } else {
+                System.out.print(i + " ");
+            }
+        }
+        System.out.println();
     }
 }
