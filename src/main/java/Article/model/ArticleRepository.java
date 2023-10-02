@@ -25,11 +25,14 @@ public class ArticleRepository {
             articles.add(a2);
             articles.add(a3);
             articles.add(a1);
+
+            for(int i = 4; i < 100; i++) {
+                Article a = new Article(i, "제목" + i, "내용" + i, 2, Util.getCurrentDate());
+                articles.add(a);
+            }
+
         }
-
     }
-
-
 
     public void insert(String title, String content, int memberId) {
         Article article = new Article(lastArticleId, title, content, memberId, Util.getCurrentDate());

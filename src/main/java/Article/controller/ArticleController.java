@@ -246,10 +246,29 @@ public class ArticleController {
     }
 
     public void page() {
-        ArrayList<Article> articles =  articleRepository.findAllArticles();
-        articleView.printArticles(articles, pagination);
+        while(true) {
+            System.out.print("페이징 명령어를 입력해주세요 ((1. 이전, 2. 다음, 3. 선택, 4. 뒤로가기): ");
+            int pageCmd = getParamInt(scan.nextLine(), -1);
 
-        System.out.print("페이징 명령어를 입력해주세요 ((1. 이전, 2. 다음, 3. 선택, 4. 뒤로가기): ");
-        int pageCmd = getParamInt(scan.nextLine(), -1);
+            switch(pageCmd) {
+                case 1:
+                    pagination.prevPage();
+                    break;
+                case 2:
+                    pagination.nextPage();
+                    break;
+                case 3:
+                    int pageNo = getParamInt(scan.nextLine(), 1);
+                    pagination.selectPage(pageNo);
+                    break;
+            }
+            ArrayList<Article> articles =  articleRepository.findPagedArticles(pagination);
+            articleView.printArticles(articles, pagination);
+
+            if(pageCmd == 4) {
+                System.out.println("페이지 메뉴를 나갑니다.");
+                break;
+            }
+        }
     }
 }

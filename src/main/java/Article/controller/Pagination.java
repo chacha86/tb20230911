@@ -56,4 +56,42 @@ public class Pagination {
     public int getTotalCount() {
         return articleRepository.getTotalArticleCount();
     }
+
+    public int getLastPageBlockNo() {
+        return (int)(Math.ceil((double)getLastPageNo() / pageCntPerBlock));
+    }
+
+    public boolean hasNextBlock() {
+        if(getPageBlockNo() < getLastPageBlockNo()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasPrevBlock() {
+        if(getPageBlockNo() > 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public void prevPage() {
+        currentPageNo--;
+        if(currentPageNo < 1) {
+            currentPageNo = 1;
+        }
+    }
+
+    public void nextPage() {
+        currentPageNo++;
+        if(currentPageNo > getLastPageNo()) {
+            currentPageNo = getLastPageNo();
+        }
+    }
+
+    public void selectPage(int pageNo) {
+        if(pageNo >= 1 && pageNo <= getLastPageNo()) {
+            currentPageNo = pageNo;
+        }
+    }
 }
